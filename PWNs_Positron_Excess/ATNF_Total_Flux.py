@@ -283,6 +283,7 @@ for t in range(len(energy_vec)):
     #print(energy_vec[t],model_vec_pulsar[t],model_vec_sec[t],model_vec_tot[t])
     
 fig = pl.figure(figsize=(8,6))
+pl.rcParams['font.size'] = '18'
 pl.plot(energy_vec, model_vec_tot,lw=1.3,ls='-',color="blue", label='PWN+SEC')
 pl.plot(energy_vec, model_vec_pulsar, lw=2.0, ls='-.', color="green", label='PWN')
 pl.plot(energy_vec, model_vec_sec, lw=2.0, ls='--', color="red", label='Secondary')
@@ -291,7 +292,7 @@ pl.errorbar(epos, pos, xerr= [x_errordown_pos, x_errorup_pos],yerr=errortot_pos,
 #pl.text(1e4,8.4e-4,r'$T=10$ kyr',fontsize=16, color='red')
 pl.ylabel(r'$E^3 \Phi_e$ [GeV$^2$/cm$^2$/s/sr]', fontsize=18)
 pl.xlabel(r'$E_e$ [GeV]', fontsize=18)
-pl.axis([1.,5.e3,5e-5,1.e-2], fontsize=18)
+pl.axis([1.,5.e3,5e-5,1.e-2])
 pl.xticks(fontsize=18)
 pl.yticks(fontsize=18)
 pl.tick_params('both', length=7, width=2, which='major')

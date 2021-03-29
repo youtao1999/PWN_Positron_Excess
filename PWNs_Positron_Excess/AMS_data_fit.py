@@ -2,6 +2,7 @@ print("############################")
 print("Making plot for analysis of Cosmic Ray He")
 print("############################")
 print("")
+
 import astropy.io.fits as pyfits
 from scipy.integrate import quad
 from math import *
@@ -44,11 +45,12 @@ pos_sec= normalization_sec*tabledata_sec[:,1]
 # total flux figure
 
 fig = pl.figure(figsize=(8,6))
+pl.rcParams['font.size'] = '16'
 pl.errorbar(epos, pos*np.power(epos,-3.), xerr= [x_errordown_pos, x_errorup_pos],yerr=errortot_pos*np.power(epos,-3.),fmt='.', color="black",label="AMS-02 $e^+$")
 pl.plot(epos_sec, pos_sec*np.power(epos_sec,-3.), lw=2.0, ls='--', color="red", label='Secondary data')
 pl.ylabel(r'$\Phi_e$ [1/GeV/cm$^2$/s/sr]', fontsize=18)
 pl.xlabel(r'$E_e$ [GeV]', fontsize=18)
-pl.axis([0.1,1e3,1e-10,1e-3], fontsize=18)
+pl.axis([0.1,1e3,1e-10,1e-3])
 pl.xticks(fontsize=18)
 pl.yticks(fontsize=18)
 pl.tick_params('both', length=7, width=2, which='major')
@@ -124,7 +126,7 @@ def flux(E, eta, b_0, d, E_c, gamma, T):
     else:
         return 0
     
-def flux_general(E, eta, b_0, d, E_c, gamma, T):
+def flux_general(E, eta, b_0, d, E_c, gamma, T) -> object:
     # define positron flux
     E_0 = E_0_func(E, alpha, b_0, T)
     E_max = math.exp( (1./(1.-alpha))*math.log((alpha-1.)*T*b_0) )
@@ -306,5 +308,5 @@ EDOT = table[:,2]
 flux_tot = 0
 for i, t in enumerate(AGE):
     if AGE[i] <= 1e4 and DIST[i] <= 10:
-        flux_tot += flux_general(E, eta, b_0, DIST[i] E_c, gamma, AGE[i]) # we dont need Edot to calculate the flux?
+        flux_tot += flux_general(E, eta, b_0, DIST[i], E_c, gamma, AGE[i]) # we dont need Edot to calculate the flux?
     
