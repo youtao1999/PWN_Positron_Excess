@@ -170,6 +170,28 @@ def function_calculatechi(distance, age):
             chisq = chisq + np.power((model_tot - pos[t]) / errortot_pos[t], 2.)
         return chisq
 
+    #######################################
+
+    ############################
+
+    # Model curve fit
+
+    m = Minuit(f_BPL, par0=0.0, par1=1.5, par2=1.2)
+    m.errors['par0'] = 1e-4
+    m.errors['par1'] = 1e-4
+    m.errors['par2'] = 1e-4
+    m.limits['par0'] = (-10.0, 10.)
+    m.limits['par1'] = (0., 5.)
+    m.limits['par2'] = (0.1, 10.)
+    m.errordef = 1
+    m.migrad()
+    # print('parameters', m.parameters)
+    # print('args', m.args)
+    print('value', m.values)
+    print('error', m.errors)
+    print('fval', m.fval)
+    return m.fval
+
 ##############################################
 # Function calls for fitting the total positron flux of ATNF Catalog pulsars
 
