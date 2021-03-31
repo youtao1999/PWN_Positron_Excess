@@ -10,6 +10,7 @@ from scipy.integrate import quad
 from math import *
 import matplotlib.pyplot as pl
 from scipy.interpolate import interp1d
+from scipy.ndimage import uniform_filter
 import numpy as np
 from iminuit import Minuit
 import matplotlib.pyplot as plt
