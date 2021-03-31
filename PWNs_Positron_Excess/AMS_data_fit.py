@@ -189,14 +189,29 @@ def function_calculatechi(distance,age):
 
     # Model curve fit
 
-    m=Minuit(f_BPL, par0=0.0, error_par0=1e-4, limit_par0=(-10.0,10.), par1=1.5, error_par1=1e-4, limit_par1=(0.,5.), par2=1.2, error_par2=1e-4, limit_par2=(0.1,10.), print_level=1,errordef=1)
-    m.print_param()#or call print_initial_param
+    m = Minuit(f_BPL, par0=0.0, par1=1.5, par2=1.2)
+    m.errors['par0'] = 1e-4
+    m.errors['par1'] = 1e-4
+    m.errors['par2'] = 1e-4
+    m.limits['par0'] = (-10.0,10.)
+    m.limits['par1'] = (0.,5.)
+    m.limits['par2'] = (0.1,10.)
+    m.errordef = 1
     m.migrad()
-    #print('parameters', m.parameters)
-    #print('args', m.args)
+    # print('parameters', m.parameters)
+    # print('args', m.args)
     print('value', m.values)
     print('error', m.errors)
     print('fval', m.fval)
+
+    # m=Minuit(f_BPL, par0=0.0, error_par0=1e-4, limit_par0=(-10.0,10.), par1=1.5, error_par1=1e-4, limit_par1=(0.,5.), par2=1.2, error_par2=1e-4, limit_par2=(0.1,10.), print_level=1,errordef=1)
+    # m.print_param()#or call print_initial_param
+    # m.migrad()
+    # #print('parameters', m.parameters)
+    # #print('args', m.args)
+    # print('value', m.values)
+    # print('error', m.errors)
+    # print('fval', m.fval)
     
     return m.fval
 ######################################
@@ -205,80 +220,90 @@ def function_calculatechi(distance,age):
 
 # Model curve fit
 
-m=Minuit(f_BPL, par0=0.0, error_par0=1e-4, limit_par0=(-10.0,10.), par1=1.5, error_par1=1e-4, limit_par1=(0.,5.), par2=1.2, error_par2=1e-4, limit_par2=(0.1,10.), print_level=1,errordef=1)
-m.print_param()#or call print_initial_param
-m.migrad()
-#print('parameters', m.parameters)
-#print('args', m.args)
-print('value', m.values)
-print('error', m.errors)
-print('fval', m.fval)
-#print('current state', f(*m.args))
-#print('covariance', m.covariance)
-#print('matrix()', m.matrix()) #covariance
-#print('matrix(correlation=True)', m.matrix(correlation=True)) #correlation
-m.print_matrix() #correlation
+# m = Minuit(f_BPL, par0=0.0, par1=1.5, par2=1.2)
+# m.errors['par0'] = 1e-4
+# m.errors['par1'] = 1e-4
+# m.errors['par2'] = 1e-4
+# m.limits['par0'] = (-10.0,10.)
+# m.limits['par1'] = (0.,5.)
+# m.limits['par2'] = (0.1,10.)
+# m.errordef = 1
+# m.migrad()
+# # print('parameters', m.parameters)
+# # print('args', m.args)
+# print('value', m.values)
+# print('error', m.errors)
+# print('fval', m.fval)
 
 ############################
 
 # Preparing for plot
 
-energy_vec = np.power(10.,np.arange(0.,3.5,0.1))
-
-model_vec_tot = np.zeros(len(energy_vec))
-model_vec_sec = np.zeros(len(energy_vec))
-model_vec_pulsar = np.zeros(len(energy_vec))
-
-for t in range(len(energy_vec)):
-    model_vec_pulsar[t]=flux(energy_vec[t],pow(10.,m.values["par0"]),b_0,d,E_c,m.values["par1"],T)
-    model_vec_sec[t]=flux_secondary(energy_vec[t],m.values["par2"])
-    model_vec_tot[t]=model_vec_pulsar[t]+model_vec_sec[t]
+# energy_vec = np.power(10.,np.arange(0.,3.5,0.1))
+#
+# model_vec_tot = np.zeros(len(energy_vec))
+# model_vec_sec = np.zeros(len(energy_vec))
+# model_vec_pulsar = np.zeros(len(energy_vec))
+#
+# for t in range(len(energy_vec)):
+#     model_vec_pulsar[t]=flux(energy_vec[t],pow(10.,m.values["par0"]),b_0,d,E_c,m.values["par1"],T)
+#     model_vec_sec[t]=flux_secondary(energy_vec[t],m.values["par2"])
+#     model_vec_tot[t]=model_vec_pulsar[t]+model_vec_sec[t]
 
 ############################
 
-fig = pl.figure(figsize=(8,6))
-pl.plot(energy_vec,model_vec_tot,lw=1.3,ls='-',color="blue", label='PWN+SEC')
-pl.plot(energy_vec, model_vec_pulsar, lw=2.0, ls='-.', color="green", label='PWN')
-pl.plot(energy_vec, model_vec_sec, lw=2.0, ls='--', color="red", label='Secondary')
-pl.errorbar(epos, pos, xerr= [x_errordown_pos, x_errorup_pos],yerr=errortot_pos,fmt='.', color="black",label="AMS-02 $e^+$")
-#pl.text(8.,4.5e-3, r'$T=10^4$ kyr', fontsize=16, color='black')
-#pl.text(1e4,8.4e-4,r'$T=10$ kyr',fontsize=16, color='red')
-pl.ylabel(r'$E^3 \Phi_e$ [GeV$^2$/cm$^2$/s/sr]', fontsize=18)
-pl.xlabel(r'$E_e$ [GeV]', fontsize=18)
-pl.axis([1.,5.e3,5e-5,1.e-2], fontsize=18)
-pl.xticks(fontsize=18)
-pl.yticks(fontsize=18)
-pl.tick_params('both', length=7, width=2, which='major')
-pl.tick_params('both', length=5, width=2, which='minor')
-pl.grid(True)
-pl.yscale('log')
-pl.xscale('log')
-pl.legend(loc=2,prop={'size':16},numpoints=1, scatterpoints=1, ncol=2)
-#fig.suptitle('The Effect of Pulsar Age on Positron Flux', fontsize=18)
-fig.tight_layout(pad=0.5)
-pl.savefig("pulsarflux_example_test.pdf")
+# fig = pl.figure(figsize=(8,6))
+# pl.plot(energy_vec,model_vec_tot,lw=1.3,ls='-',color="blue", label='PWN+SEC')
+# pl.plot(energy_vec, model_vec_pulsar, lw=2.0, ls='-.', color="green", label='PWN')
+# pl.plot(energy_vec, model_vec_sec, lw=2.0, ls='--', color="red", label='Secondary')
+# pl.errorbar(epos, pos, xerr= [x_errordown_pos, x_errorup_pos],yerr=errortot_pos,fmt='.', color="black",label="AMS-02 $e^+$")
+# #pl.text(8.,4.5e-3, r'$T=10^4$ kyr', fontsize=16, color='black')
+# #pl.text(1e4,8.4e-4,r'$T=10$ kyr',fontsize=16, color='red')
+# pl.ylabel(r'$E^3 \Phi_e$ [GeV$^2$/cm$^2$/s/sr]', fontsize=18)
+# pl.xlabel(r'$E_e$ [GeV]', fontsize=18)
+# pl.axis([1.,5.e3,5e-5,1.e-2])
+# pl.xticks(fontsize=18)
+# pl.yticks(fontsize=18)
+# pl.tick_params('both', length=7, width=2, which='major')
+# pl.tick_params('both', length=5, width=2, which='minor')
+# pl.grid(True)
+# pl.yscale('log')
+# pl.xscale('log')
+# pl.legend(loc=2,prop={'size':16},numpoints=1, scatterpoints=1, ncol=2)
+# #fig.suptitle('The Effect of Pulsar Age on Positron Flux', fontsize=18)
+# fig.tight_layout(pad=0.5)
+# pl.savefig("pulsarflux_example_test.pdf")
 
 ##########################
 
 # Contour plot
 
-distance_vec = np.logspace(-1., 1.,100)
-age_vec = np.logspace(1., 4.,100)
+distance_vec = kpc*np.logspace(-1., 1.,100)
+age_vec = kyr*np.logspace(1., 4.,100)
 chisquare = np.zeros((len(distance_vec),len(age_vec)))
+
+# make output directory
+
+Output = "Tabular data of chi-square contour plot.txt"
+outF = open(Output, "w")
 
 for t in range(len(distance_vec)):
     for u in range(len(age_vec)):
         chisquare[t,u] = function_calculatechi(distance_vec[t],age_vec[u])
-            
+        outF.write("%.3f "%(chisquare[t,u]))
+    outF.write("\n")
+outF.close()
+
 ############################
-            
+# Contour plot
 fig = pl.figure(figsize=(8,6))
-#dlog = ( log10(5.*chisquare.min())-log10(chisquare.min()) )/50.
-#scale_vec = np.power( 10. , np.arange( log10(chisquare.min()),log10(5.*chisquare.min()), dlog ) )
-#scale_cb = np.power( 10. , np.arange( log10(chisquare.min()),log10(5.*chisquare.min()), dlog*10. ) )
-dlog = ( 5.*chisquare.min()-chisquare.min() )/100.
-scale_vec = np.arange( chisquare.min(),5.*chisquare.min(), dlog ) 
-scale_cb = np.arange( chisquare.min(),5.*chisquare.min(), dlog*10.  )
+pl.rcParams['font.size'] = '18'
+#dlog = ( log10(5.*np.nanmin(chisquare))-log10(np.nanmin(chisquare)) )/50.
+#scale_vec = np.power( 10. , np.arange( log10(np.nanmin(chisquare)),log10(5.*np.nanmin(chisquare)), dlog ) )
+#scale_cb = np.power( 10. , np.arange( log10(np.nanmin(chisquare)),log10(5.*np.nanmin(chisquare)), dlog*10. ) )
+dlog = ( 5.*np.nanmin(chisquare)-np.nanmin(chisquare) )/100.
+scale_vec = np.arange( np.nanmin(chisquare),5.*np.nanmin(chisquare), dlog )
+scale_cb = np.arange( np.nanmin(chisquare),5.*np.nanmin(chisquare), dlog*10.)
 #print scale_vec
 pl.contourf(age_vec, distance_vec, chisquare, 100, levels=list(scale_vec), cmap='hot')
 #im = plt.imshow(table, interpolation='nearest', cmap='hot')
@@ -287,7 +312,7 @@ pl.colorbar(ticks=scale_cb)
 #plt.colorbar()
 pl.ylabel(r'$d$ [kpc]', fontsize=18)
 pl.xlabel(r'$T$ [kyr]', fontsize=18)
-pl.axis([age_vec[0],age_vec[len(age_vec)-1],distance_vec[0],distance_vec[len(distance_vec)-1]], fontsize=14)
+pl.axis([age_vec[0],age_vec[len(age_vec)-1],distance_vec[0],distance_vec[len(distance_vec)-1]])
 pl.xticks(fontsize=16)
 pl.yticks(fontsize=16)
 pl.grid(True)
@@ -297,16 +322,3 @@ pl.legend(loc=2,prop={'size':15},numpoints=1, scatterpoints=1, ncol=2)
 fig.tight_layout(pad=0.5)
 pl.savefig("Contour_dage.pdf")
 pl.savefig("Contour_dage.png")
-
-# make table for ATNF-catalog pulsar data
-
-table = np.loadtxt("ATNF-Catalog.txt")
-DIST = table[:,0] #in kpc
-AGE = table[:,1]/1e3 #in kyr
-EDOT = table[:,2]
-
-flux_tot = 0
-for i, t in enumerate(AGE):
-    if AGE[i] <= 1e4 and DIST[i] <= 10:
-        flux_tot += flux_general(E, eta, b_0, DIST[i], E_c, gamma, AGE[i]) # we dont need Edot to calculate the flux?
-    

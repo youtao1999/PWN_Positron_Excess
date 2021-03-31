@@ -91,10 +91,10 @@ def b(b_0, E):
     # define energy loss
     return b_0*E**2
     
-def Q_0_func(eta,gamma):
-    #eta = 0.1 # flux conversion rate
-    #tau_0 = 10*kyr #kyr
-    #E_dot = 1e35 #spin-down luminosity in erg/s
+def Q_0_func(eta,gamma, T):
+    eta = 0.1 # flux conversion rate
+    tau_0 = 10*kyr #kyr
+    E_dot = 1e35 #spin-down luminosity in erg/s
     E_tot = quad(Q,math.log(0.1,10),math.log(1.e4,10),args=(1.,gamma,E_c))[0]
     return eta*tau_0*E_dot*ergGeV*(1+T/tau_0)**2/E_tot
 
@@ -145,22 +145,6 @@ def chisqr(E,flux,fluxerr,Q_0,b_0,d,E_c,gamma,T):
         model = flux(Q_0, b_0, d, E, E_c, gamma, T)
         chisqrv = chisqrv + np.power((model-flux[t])/fluxerr[t],2.)
     return chisqrv
-
-#####################################
-
-#def f(par0,par1,par2): for a fixed age and distance
-def f_BPL(par0,par1,par2):
-    eta = pow(10.,par0)
-    gamma = par1
-    normalization_sec = par2
-    chisq = 0
-    for t in range(26,len(epos),1):
-        model = flux(epos[t],eta,b_0,d,E_c,gamma,T)
-        model_sec = flux_secondary(epos_sec[t],normalization_sec)
-        model_tot = model+model_sec
-        chisq = chisq + np.power((model_tot-pos[t])/errortot_pos[t],2.)
-    return chisq
-
 
 table = np.loadtxt("ATNF_Catalog.txt")
 DIST = table[:,1] #in kpc
@@ -276,7 +260,6 @@ model_vec_sec = np.zeros(len(energy_vec))
 model_vec_pulsar = np.zeros(len(energy_vec))
 
 for t in range(len(energy_vec)):
-    #model_vec_pulsar[t]=total_flux(energy_vec[t], m.values["par1"], pow(10., m.values["par0"]))
     model_vec_pulsar[t]=pow(10., m.values["par0"])*funcinterpolate(energy_vec[t], m.values["par1"])
     model_vec_sec[t]=flux_secondary(energy_vec[t],m.values["par2"])
     model_vec_tot[t]=model_vec_pulsar[t]+model_vec_sec[t]
@@ -304,3 +287,4 @@ pl.legend(loc=2,prop={'size':16},numpoints=1, scatterpoints=1, ncol=2)
 #fig.suptitle('The Effect of Pulsar Age on Positron Flux', fontsize=18)
 fig.tight_layout(pad=0.5)
 pl.savefig("ATNF_pulsar_flux.pdf")
+pl.savefig("ATNF_pulsar_flux.png")
