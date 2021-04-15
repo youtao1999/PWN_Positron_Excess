@@ -42,18 +42,12 @@ outF.close()
 # Contour plot
 fig = pl.figure(figsize=(8,6))
 pl.rcParams['font.size'] = '18'
-#dlog = ( log10(5.*np.nanmin(chisquare))-log10(np.nanmin(chisquare)) )/50.
-#scale_vec = np.power( 10. , np.arange( log10(np.nanmin(chisquare)),log10(5.*np.nanmin(chisquare)), dlog ) )
-#scale_cb = np.power( 10. , np.arange( log10(np.nanmin(chisquare)),log10(5.*np.nanmin(chisquare)), dlog*10. ) )
 dlog = ( 5.*np.nanmin(chisquare)-np.nanmin(chisquare) )/100.
 scale_vec = np.arange( np.nanmin(chisquare),5.*np.nanmin(chisquare), dlog )
 scale_cb = np.arange( np.nanmin(chisquare),5.*np.nanmin(chisquare), dlog*10.)
 #print scale_vec
 pl.contourf(age_grid, dist_grid, chisquare, 100, levels=list(scale_vec), cmap='hot')
-#im = plt.imshow(table, interpolation='nearest', cmap='hot')
-#plt.contour(ra_vec, dec_vec, table, colors='black')
 pl.colorbar(ticks=scale_cb)
-#plt.colorbar()
 pl.ylabel(r'$d$ [kpc]', fontsize=18)
 pl.xlabel(r'$T$ [kyr]', fontsize=18)
 pl.axis([age_vec[0],age_vec[len(age_vec)-1],distance_vec[0],distance_vec[len(distance_vec)-1]])

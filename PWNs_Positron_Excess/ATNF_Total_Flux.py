@@ -241,7 +241,7 @@ m.migrad()
 print('value', m.values)
 print('error', m.errors)
 print('fval', m.fval)
-#print('current state', f(*m.args))
+#print('current state', f(*m.args)
 #print('covariance', m.covariance)
 #print('matrix()', m.matrix()) #covariance
 #print('matrix(correlation=True)', m.matrix(correlation=True)) #correlation

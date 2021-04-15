@@ -5,18 +5,10 @@
     to AMS-02 data
 '''
 
-import astropy.io.fits as pyfits
-from scipy.integrate import quad
 from math import *
-import matplotlib.pyplot as pl
 from scipy.interpolate import interp1d
-from scipy.ndimage import uniform_filter
-import numpy as np
 from iminuit import Minuit
-import matplotlib.pyplot as plt
-import scipy
 import numpy as np
-from IPython.display import Latex
 from scipy.integrate import quad
 import math
 
