@@ -17,9 +17,6 @@ import matplotlib.pyplot as pl
 #e 7, mu 10, tau 13, bb 16, tt 17, WW 20, ZZ 23, gamma 25, h 26
 channel_arr = np.array([16, 10, 13])
 
-# Define secondary normalization
-normalization_sec = 1.2
-
 # Define necessary constants for PWN component
 
 kpc = 3.09e18
@@ -53,11 +50,11 @@ def f_BPL_DM(par0,par1,par2,par3,par4):
     gamma = par1
     normalization_sec = par2
     DM_mass = par3
-    sigma_v_normalization = par4
+    sigma_v_normalization = math.pow(10,par4)
     chisq = 0
     for t in range(24, len(epos), 1):
         model_PWN = PWN.flux(epos[t], eta, b_0, d, E_c, gamma, T)
-        model_DM = sigma_v_normalization*DM.DM_spectrum(epos[t], DM_mass, DMchannel)[0]
+        model_DM = np.power(epos[t],3.)*sigma_v_normalization*DM.DM_spectrum(epos[t], DM_mass, DMchannel)[0]
         model_sec = PWN.flux_secondary(epos[t], normalization_sec)
         model_tot = model_PWN + model_sec + model_DM
         chisq = chisq + np.power((model_tot - pos[t]) / errortot_pos[t], 2.)
@@ -86,8 +83,8 @@ for DMchannel in channel_arr:
     m.limits['par0'] = (-10.0, 10.)
     m.limits['par1'] = (0., 5.)
     m.limits['par2'] = (0.1, 10.)
-    m.limits['par3'] = (100, 300)
-    m.limits['par4'] = (0.5, 1.5)
+    m.limits['par3'] = (1e1, 1e4)
+    m.limits['par4'] = (-3,6)
     m.errordef = 1
     m.migrad()
     print('value', m.values)
@@ -102,9 +99,9 @@ for DMchannel in channel_arr:
     model_vec_dm = np.zeros(len(epos))
 
     for t in range(len(epos)):
-        model_vec_pulsar[t] = PWN.flux(epos[t], m.values["par0"], b_0, d, E_c, m.values["par1"], T)
+        model_vec_pulsar[t] = PWN.flux(epos[t], np.power(10, m.values["par0"]), b_0, d, E_c, m.values["par1"], T)
         model_vec_sec[t] = PWN.flux_secondary(epos[t], m.values["par2"])
-        model_vec_dm[t] = m.values["par4"]*DM.DM_spectrum(epos[t], m.values["par3"],DMchannel)[0]
+        model_vec_dm[t] = np.power(epos[t],3.)*math.pow(10,m.values["par4"])*DM.DM_spectrum(epos[t], m.values["par3"],DMchannel)[0]
         model_vec_tot[t] = model_vec_pulsar[t] + model_vec_sec[t] + model_vec_dm[t]
 
     fig = pl.figure(figsize=(8, 6))
@@ -115,11 +112,9 @@ for DMchannel in channel_arr:
     pl.plot(epos, model_vec_dm, lw=2.0, ls=':', color="cyan", label='DM')
     pl.errorbar(epos, pos, xerr=[x_errordown_pos, x_errorup_pos], yerr=errortot_pos, fmt='.', color="black",
                 label="AMS-02 $e^+$")
-    # pl.text(8.,4.5e-3, r'$T=10^4$ kyr', fontsize=16, color='black')
-    # pl.text(1e4,8.4e-4,r'$T=10$ kyr',fontsize=16, color='red')
     pl.ylabel(r'$E^3 \Phi_e$ [GeV$^2$/cm$^2$/s/sr]', fontsize=18)
     pl.xlabel(r'$E_e$ [GeV]', fontsize=18)
-    pl.axis([1., 5.e3, 5e-5, 1.e-2])
+    pl.axis([1., 5.e3, 5e-5, 1e-2])
     pl.xticks(fontsize=18)
     pl.yticks(fontsize=18)
     pl.tick_params('both', length=7, width=2, which='major')
@@ -128,10 +123,9 @@ for DMchannel in channel_arr:
     pl.yscale('log')
     pl.xscale('log')
     pl.legend(loc=2, prop={'size': 16}, numpoints=1, scatterpoints=1, ncol=2)
-    # fig.suptitle('The Effect of Pulsar Age on Positron Flux', fontsize=18)
     fig.tight_layout(pad=0.5)
     # pl.savefig("ATNF_pulsar_flux.pdf")
-    pl.savefig("DM_multichannel%s.png"%DMchannel)
+    pl.savefig("DM_multichannel_%s.png"%DMchannel)
 
 # exit "Output" directory
 os.chdir("../")
