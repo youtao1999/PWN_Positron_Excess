@@ -114,7 +114,7 @@ for DMchannel in channel_arr:
                 label="AMS-02 $e^+$")
     pl.ylabel(r'$E^3 \Phi_e$ [GeV$^2$/cm$^2$/s/sr]', fontsize=18)
     pl.xlabel(r'$E_e$ [GeV]', fontsize=18)
-    pl.axis([1., 5.e3, 5e-5, 1e-2])
+    pl.axis([1., 5.e3, 5e-6, 1e-2])
     pl.xticks(fontsize=18)
     pl.yticks(fontsize=18)
     pl.tick_params('both', length=7, width=2, which='major')

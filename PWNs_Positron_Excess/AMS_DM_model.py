@@ -10,6 +10,8 @@ import matplotlib.pyplot as pl
 from scipy.interpolate import interp1d
 from scipy.interpolate import interp2d
 import numpy as np
+import numba
+from numba import jit
 
 #Constants
 pigreco = 3.141592653589793
@@ -36,6 +38,8 @@ rodot = 8.33*kpc #cm
 rhodot = 0.4 #GeV/cm^3
 
 table = np.loadtxt('DMfluxes_positrons_cleaned_NFW_MED_MF2.txt')
+
+@jit(nopython=True)
 
 def DMdensity_funcdist(dist,DMdensity):
 

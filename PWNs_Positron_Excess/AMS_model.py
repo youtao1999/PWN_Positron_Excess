@@ -11,6 +11,8 @@ from iminuit import Minuit
 import numpy as np
 from scipy.integrate import quad
 import math
+import numba
+from numba import jit
 
 #constants
 pigreco = 3.141592653589793
@@ -56,6 +58,8 @@ alpha = 2
 b_0 = 1e-16
 
 # necessary functions to calculate positron energy flux as a function of energy
+
+@jit(nopython=True)
 def integrand(E, delta, k_0, alpha):
     return 4 * k_0 / b_0 * E ** (delta - alpha)
 
