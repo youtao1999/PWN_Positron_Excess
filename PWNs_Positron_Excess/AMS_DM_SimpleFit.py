@@ -15,7 +15,7 @@ import matplotlib.pyplot as pl
 
 # Determine the channels we would like to fit
 #e 7, mu 10, tau 13, bb 16, tt 17, WW 20, ZZ 23, gamma 25, h 26
-channel_arr = np.array([16, 10, 13])
+channel_arr = np.array([7, 16, 10, 13])
 
 # Define necessary constants for PWN component
 
