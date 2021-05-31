@@ -8,7 +8,6 @@ from math import *
 import matplotlib.pyplot as pl
 from scipy.interpolate import interp1d
 from scipy.interpolate import interp2d
-import numpy as np
 from iminuit import Minuit
 import matplotlib.pyplot as plt
 import scipy
@@ -30,10 +29,6 @@ Ee = 1e-9 # eV in GeV
 
 kpc = 3.09e21
 kyr = 1000.*365.*24.*3600.
-#d=[0.2,0.5,1.0,2.0]
-#T=[30.,100.,200.,500.]
-#d = 0.5*kpc #kpc
-#T = 100*kyr #age in kyrs
 E_c = 1000 #cutoff energy in GeV
 #gamma = 1.8
 tau_0 = 10.*kyr #kyr
@@ -48,9 +43,8 @@ ergGeV = 624.15097
 # Extract energy range from AMS-02 data
 
 tabledata = np.loadtxt('positron_ams02_19.dat')
-epos = tabledata[:,0]
-pos=tabledata[:,6]*np.power(tabledata[:,2],3.)*tabledata[:,13]/1.e4 #rescale the flux into 1/GeV/cm$^2$/s/sr
-epos= tabledata[:,2] #flux in 1/GeV/m$^2$/s/sr
+epos = tabledata[:, 0]
+pos=tabledata[:,6]*np.power(tabledata[:,2], 3.)*tabledata[:,13]/1.e4 #rescale the flux into 1/GeV/cm$^2$/s/sr
 
 #take the AMS-02 data
 #folder_data = r'''C:\Users\Sissi\ Chen\Desktop\Positron\'''

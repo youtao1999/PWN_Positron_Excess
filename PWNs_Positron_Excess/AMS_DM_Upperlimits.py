@@ -16,10 +16,11 @@ import matplotlib.pyplot as pl
 
 # Determine the channels we would like to fit
 #e 7, mu 10, tau 13, bb 16, tt 17, WW 20, ZZ 23, gamma 25, h 26
-channel_arr = np.array([16])
+channel_arr = np.array([7, 16, 10, 13])
 
-# Make array of cross sections
-sigma_arr = np.logspace(10^-29,10^20,5)
+# Make array of cross sections and masses
+mass_arr = np.logspace(1.0, 4.0, 30) # GeV
+sigma_arr = np.logspace(-29.0 ,20.0 ,90)
 sigma_exp_arr = np.log10(sigma_arr)
 
 # Define necessary constants for PWN component
@@ -62,35 +63,38 @@ def f_BPL_DM(par0,par1,par2,par3,par4):
         model_sec = PWN.flux_secondary(epos[t], normalization_sec)
         model_tot = model_PWN + model_sec + model_DM
         chisq = chisq + np.power((model_tot - pos[t]) / errortot_pos[t], 2.)
+    print(chisq)
     return chisq
 
 # Define an empty array of chisquare values from the the cross section array
-chisquare_arr = np.zeros((len(channel_arr), len(sigma_exp_arr)))
+chisquare_arr = np.zeros((len(channel_arr), len(mass_arr), len(sigma_exp_arr)))
+upperlim_arr = np.zeros((len(channel_arr), len(mass_arr)))
 
 for i, DMchannel in enumerate(channel_arr):
-    for j, sigma_exp in enumerate(sigma_exp_arr):
-        m = Minuit(f_BPL_DM, par0=0.0, par1=1.5, par2=1.2, par3=200., par4=sigma_exp)
-        m.errors['par0'] = 1e-4
-        m.errors['par1'] = 1e-4
-        m.errors['par2'] = 1e-4
-        m.errors['par3'] = 1e-4
-        m.errors['par4'] = 1e-4
-        m.limits['par0'] = (-10.0, 10.)
-        m.limits['par1'] = (0., 5.)
-        m.limits['par2'] = (0.1, 10.)
-        m.limits['par3'] = (1e1, 1e4)
-        m.limits['par4'] = (-3, 6)
-        m.errordef = 1
-        m.migrad()
-        # print('value', m.values)
-        # print('error', m.errors)
-        # print('fval', m.fval)
-        chisquare_arr[i,j] = m.fval
+    for j, mass in enumerate(mass_arr):
+        for k, sigma_exp in enumerate(sigma_exp_arr):
+            m = Minuit(f_BPL_DM, par0=0.06, par1=1.44, par2=1.26, par3=mass, par4=sigma_exp)
+            m.errors['par0'] = 0.06
+            m.errors['par1'] = 0.03
+            m.errors['par2'] = 0.02
+            m.errors['par3'] = 1e-4
+            m.errors['par4'] = 1e-4
+            m.limits['par0'] = (-10.0, 10.)
+            m.limits['par1'] = (0., 5.)
+            m.limits['par2'] = (0.1, 10.)
+            m.limits['par3'] = (1e1, 1e4)
+            m.limits['par4'] = (-3, 6)
+            m.errordef = 1
+            m.migrad()
+            # print('value', m.values)
+            # print('error', m.errors)
+            # print('fval', m.fval)
+            chisquare_arr[i, j, k] = m.fval
 
 print(chisquare_arr)
 
 # Define function that finds the upperlimit
-def upperlimit(chisq_arr):
+def upperlimindex(chisq_arr):
     '''
     Upperlimit defined as the sigma_v that causes a worsening of the chisquare values of >= 2.7 from the
     minimum. This function takes in an array of sigma_v's, a corresponding array of chisquare values (which
@@ -99,7 +103,38 @@ def upperlimit(chisq_arr):
     '''
     # chi_arr is the array of chisquare values for single channel
     min_chisq = min(chisq_arr)
-    lim_index = np.argwhere(chisq_arr >= min_chisq + 2.7)[0,0]
-    return lim_index
+    proxy = np.argwhere(chisq_arr >= min_chisq + 2.7)
+    if len(proxy) > 0:
+        lim_index = proxy[0, 0]
+        return lim_index
+    else:
+        return np.argwhere(chisq_arr == max(chisq_arr))[0,0]
 
-# So we eventually end up with one upper limit for each channel?
+# Now traverse chisquare_arr to calculate upperlimits
+
+for i, channel in enumerate(channel_arr):
+    for j, mass in enumerate(mass_arr):
+        chisq_arr = chisquare_arr[i, j]
+        index = upperlimindex(chisq_arr)
+        upperlim_arr[i, j] = sigma_arr[index]
+
+# Output files
+
+# Check to see if the output file already exists
+if os.path.isdir("Cross section upperlimit vs dark matter mass"):
+    shutil.rmtree("Cross section upperlimit vs dark matter mass")
+
+# make output directory
+Output = "Cross section upperlimit vs dark matter mass"
+os.mkdir(Output)
+os.chdir(Output)
+
+for i, channel in enumerate(channel_arr):
+    outF = open("Sigma_v_upperlim_vs_mass_channel%d.txt"%channel, "w")
+    for u, upperlim in enumerate(upperlim_arr[i]):
+        outF.write("%.3f %.3e \n"%(mass_arr[u], upperlim))
+    outF.close()
+
+# exit "Output" directory
+
+os.chdir("../")
