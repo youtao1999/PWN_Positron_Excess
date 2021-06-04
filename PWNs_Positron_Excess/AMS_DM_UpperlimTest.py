@@ -12,7 +12,6 @@ from iminuit import Minuit
 import os
 import shutil
 import time_package
-import matplotlib.pyplot as pl
 
 # Determine the channels we would like to fit
 #e 7, mu 10, tau 13, bb 16, tt 17, WW 20, ZZ 23, gamma 25, h 26
@@ -20,8 +19,8 @@ channel_arr = np.array([13])
 channel = 13
 
 # Make array of cross sections and masses
-DM_mass = 10.
-sigma_arr = np.logspace(-29.0 ,20.0 ,5)
+DM_mass = 100.
+sigma_arr = np.logspace(-29.0 ,-20.0 ,30)
 sigma_exp_arr = np.log10(sigma_arr)
 
 # Extract AMS-02 data
@@ -53,14 +52,15 @@ def f_BPL_DM(par0, par1, par2, par3):
     eta = pow(10., par0)
     gamma = par1
     normalization_sec = par2
-    sigma_v_normalization = np.power(10, par3)
+    sigma_v_normalization = np.power(10., par3)
     chisq = 0
     for t in range(24, len(epos), 1):
         model_PWN = eta * funcinterpolate(epos[t], gamma)
-        model_DM = sigma_v_normalization*DM.DM_spectrum(epos[t], DM_mass, channel)[0]
+        model_DM = np.power(epos[t],3.)*sigma_v_normalization*DM.DM_spectrum(epos[t], DM_mass, channel)[0]/np.power(10.,-26)
         model_sec = PWN.flux_secondary(epos[t], normalization_sec)
         model_tot = model_PWN + model_sec + model_DM
         chisq = chisq + np.power((model_tot - pos[t]) / errortot_pos[t], 2.)
+        # print(epos[t],model_PWN,model_DM,model_sec)
     return chisq
 
 # Define an empty array of chisquare values from the the cross section array
@@ -77,34 +77,33 @@ for i, DMchannel in enumerate(channel_arr):
         m.limits['par0'] = (-10.0, 10.)
         m.limits['par1'] = (0., 5.)
         m.limits['par2'] = (0.1, 10.)
-        m.limits['par3'] = (-3, 6)
+        m.limits['par3'] = (-29, 20)
+        m.fixed['par3'] = True
         m.errordef = 1
         m.migrad()
-        # print('value', m.values)
-        # print('error', m.errors)
-        # print('fval', m.fval)
+        print('value', m.values)
+        print('error', m.errors)
+        print('fval', m.fval)
         chisquare_arr[i, j] = m.fval
 
 print(chisquare_arr)
 
-# # Output files
-#
-# # Check to see if the output file already exists
-# if os.path.isdir("sigma_v vs chisquare"):
-#     shutil.rmtree("sigma_v vs chisquare")
-#
-# # make output directory
-# Output = "sigma_v vs chisquare"
-# os.mkdir(Output)
-# os.chdir(Output)
-#
-# for i, channel in enumerate(chisquare_arr):
-#     outF = open("sigma_v_vs_chisquare%d.txt"%channel_arr[i], "w")
-#     for j, mass in enumerate(chisquare_arr[i]):
-#         for k, chisq in enumerate(chisquare_arr[i,j]):
-#             outF.write("%.3f %.3e \n"%(sigma_exp_arr[k], chisq))
-#     outF.close()
-#
-# # exit "Output" directory
-#
-# os.chdir("../")
+# Output files
+
+# Check to see if the output file already exists
+if os.path.isdir("sigma_v vs chisquare"):
+    shutil.rmtree("sigma_v vs chisquare")
+
+# make output directory
+Output = "sigma_v vs chisquare"
+os.mkdir(Output)
+os.chdir(Output)
+
+for i, channel in enumerate(chisquare_arr):
+    outF = open("sigma_v_vs_chisquare%d.txt"%channel_arr[i], "w")
+    for j, chisq in enumerate(chisquare_arr[i]):
+       outF.write("%.3f %.3e \n"%(sigma_exp_arr[j], chisq))
+outF.close()
+
+# exit "Output" directory
+os.chdir("../")
