@@ -15,8 +15,8 @@ import time_package
 
 # Determine the channels we would like to fit
 #e 7, mu 10, tau 13, bb 16, tt 17, WW 20, ZZ 23, gamma 25, h 26
-channel_arr = np.array([13])
-channel = 13
+channel_arr = np.array([16])
+channel = 16
 
 # Make array of cross sections and masses
 DM_mass = 100.
@@ -60,7 +60,6 @@ def f_BPL_DM(par0, par1, par2, par3):
         model_sec = PWN.flux_secondary(epos[t], normalization_sec)
         model_tot = model_PWN + model_sec + model_DM
         chisq = chisq + np.power((model_tot - pos[t]) / errortot_pos[t], 2.)
-        # print(epos[t],model_PWN,model_DM,model_sec)
     return chisq
 
 # Define an empty array of chisquare values from the the cross section array
