@@ -21,9 +21,9 @@ import time_package
 channel_arr = np.array([16])
 
 # Make array of cross sections and masses
-mass_arr = np.logspace(1.0, 4.0, 2) # GeV
+mass_arr = np.logspace(1.0, 4.0, 30) # GeV
 # mass_arr = np.array([1000.])
-sigma_arr = np.logspace(-29.0 ,-20.0 ,5)
+sigma_arr = np.logspace(-29.0 ,-20.0 ,30)
 sigma_exp_arr = np.log10(sigma_arr)
 
 # Extract AMS-02 data
@@ -84,7 +84,7 @@ for i, DMchannel in enumerate(channel_arr):
             m.limits['par1'] = (0., 5.)
             m.limits['par2'] = (0.1, 10.)
             m.limits['par3'] = (-29, 20)
-            m.limits['par4'] = (95., 105.)
+            m.limits['par4'] = (1., 100000.)
             m.fixed['par3'] = True
             m.fixed['par4'] = True
             m.errordef = 1
@@ -120,11 +120,13 @@ for i, channel in enumerate(channel_arr):
         chisq_arr = chisquare_arr[i, j]
         index = upperlimindex(chisq_arr)
         upperlim_arr[i, j] = sigma_arr[index]
+        # Plot sigma vs chisq to see if the upperlimit is reasonable
+        fig = pl.figure(figsize=(8, 6))
+        pl.plot(sigma_arr, chisquare_arr[i, j], lw=1.3, ls='-', color="blue", label='Mass = 100. GeV')
 
 print("Upperlimit sigma: ", upperlim_arr)
 
 # Output files
-
 # Check to see if the output file already exists
 if os.path.isdir("Cross section upperlimit vs dark matter mass"):
     shutil.rmtree("Cross section upperlimit vs dark matter mass")
