@@ -102,7 +102,7 @@ for i, channel in enumerate(chisquare_arr):
     outF = open("sigma_v_vs_chisquare%d.txt"%channel_arr[i], "w")
     for j, chisq in enumerate(chisquare_arr[i]):
        outF.write("%.3f %.3e \n"%(sigma_exp_arr[j], chisq))
-outF.close()
+    outF.close()
 
 # exit "Output" directory
 os.chdir("../")

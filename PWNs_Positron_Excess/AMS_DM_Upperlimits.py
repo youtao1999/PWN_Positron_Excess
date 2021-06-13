@@ -96,6 +96,31 @@ for i, DMchannel in enumerate(channel_arr):
 
 print(chisquare_arr)
 
+# Output files
+
+# Check to see if the output file already exists
+if os.path.isdir("sigma_v vs chisquare"):
+    shutil.rmtree("sigma_v vs chisquare")
+
+# make output directory
+Output = "sigma_v vs chisquare"
+os.mkdir(Output)
+os.chdir(Output)
+
+for i, channel in enumerate(chisquare_arr):
+    dirname = "sigma_v vs chisquare%d"% channel_arr[i]
+    os.mkdir(dirname)
+    os.chdir(dirname)
+    for j, mass in enumerate(chisquare_arr[i]):
+        outF = open("sigma_v_vs_chisquare_mass=%d.txt" % mass_arr[j], "w")
+        for k, chisq in enumerate(chisquare_arr[i, j]):
+           outF.write("%.3f %.3e \n"%(sigma_exp_arr[k], chisq))
+        outF.close()
+    os.chdir("../")
+
+# exit "Output" directory
+os.chdir("../")
+
 # Define function that finds the upperlimit
 def upperlimindex(chisq_arr):
     '''
