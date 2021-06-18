@@ -5,39 +5,86 @@
     to AMS positron excess
 '''
 
+import matplotlib.pyplot as pl
+from scipy.interpolate import interp1d
 import numpy as np
 import os
+import shutil
 
-# Define function that finds the upperlimit
-def upperlimindex(chisq_arr):
-    '''
-    Upperlimit defined as the sigma_v that causes a worsening of the chisquare values of >= 2.7 from the
-    minimum. This function takes in an array of sigma_v's, a corresponding array of chisquare values (which
-    is two dimensional accounting for both the dark matter channel as well as sigma_v's, finds the minimum of
-    chisquare value for each channel and returns an array of chisquare value minimums
-    '''
-    # chi_arr is the array of chisquare values for single channel
-    index_min = np.argsort(chisq_arr)[0]
-    print(index_min)
-    index_before = index_min - 1
-    index_after = index_min + 1
+# Specify channel plot
+channel = 16
 
-    # Calculate parabola from these three points
-
-    min_chisq = min(chisq_arr)
-    proxy = np.argwhere(chisq_arr >= min_chisq + 2.7)
-
-    if len(proxy) > 0:
-        lim_index = proxy[0, 0]
-        return lim_index
+def upperlim_sigma(chi_vec, sigma_vec):
+    likelihood_scan = -chi_vec
+    like_zero = likelihood_scan
+    index_max = np.argsort(-likelihood_scan)[0]
+    likelihood_max = likelihood_scan[index_max]
+    TS =  -2.*(like_zero-likelihood_max)
+    f_ul = interp1d(likelihood_scan[index_max:], sigma_vec[index_max:], kind='linear')
+    if likelihood_max-2.71 > -(likelihood_max-likelihood_scan[index_max:].min()):
+        sigmavUL = f_ul(likelihood_max-2.71)
     else:
-        return np.argwhere(chisq_arr == max(chisq_arr))[0,0]
+        print('WARNING')
+        sigmavUL = -(likelihood_max-likelihood_scan[index_max:].min())
+        print(sigmavUL)
+    return sigmavUL
 
 os.chdir("sigma_v vs chisquare")
 os.chdir("sigma_v vs chisquare16")
-table = np.loadtxt('sigma_v_vs_chisquare_mass=3039.txt')
-chisquare_arr = table[:,1]
-sigma_arr = table[:,0]
-print(np.shape(chisquare_arr))
-print(upperlimindex(chisquare_arr))
-print(sigma_arr[upperlimindex(chisquare_arr)])
+
+mass_arr = np.logspace(1.0, 4.0, 30) # GeV
+upperlim_arr = np.zeros(len(mass_arr))
+
+# table = np.loadtxt("sigma_v_vs_chisquare_mass=3039.txt")
+# sigma_vec = table[:, 0]
+# chi_vec = table[:, 1]
+# print(upperlim_sigma(chi_vec))
+
+for j, mass in enumerate(mass_arr):
+    table = np.loadtxt("sigma_v_vs_chisquare_mass=%d.txt" % mass_arr[j])
+    sigma_vec = table[:,0]
+    chi_vec = table[:,1]
+    upperlim_arr[j] = upperlim_sigma(chi_vec, sigma_vec)
+
+# Exit data directory
+os.chdir("../../")
+# Output files
+# Check to see if the output file already exists
+if os.path.isdir("Cross section upperlimit vs dark matter mass"):
+    shutil.rmtree("Cross section upperlimit vs dark matter mass")
+
+# make output directory
+Output = "Cross section upperlimit vs dark matter mass"
+os.mkdir(Output)
+os.chdir(Output)
+
+# Produce output data
+outF = open("Sigma_v_upperlim_vs_mass_channel%d.txt"%channel, "w")
+for u, upperlim in enumerate(upperlim_arr):
+    outF.write("%.3f %.3f \n"%(mass_arr[u], upperlim))
+outF.close()
+
+# Produce sigma_v vs chisq plot
+
+# Boundary index for the plot
+upperbound = 16
+lowerbound = 11
+fig = pl.figure(figsize=(8, 6))
+pl.rcParams['font.size'] = '18'
+pl.plot(mass_arr, -upperlim_arr, lw=1.3, ls='-', color="blue", label='Channel = 16')
+pl.xlabel('$Mass/GeV$', fontsize=18)
+pl.ylabel(r'$\sigma_v$', fontsize=18)
+# pl.axis([np.power(10, sigma_v)[lowerbound], np.power(10, sigma_v)[upperbound], chisq[lowerbound], chisq[upperbound]])
+pl.xticks(fontsize=18)
+pl.yticks(fontsize=18)
+pl.tick_params('both', length=7, width=2, which='major')
+pl.tick_params('both', length=5, width=2, which='minor')
+pl.grid(True)
+pl.yscale('log')
+pl.xscale('log')
+pl.legend(loc=2, prop={'size': 16}, numpoints=1, scatterpoints=1, ncol=2)
+fig.tight_layout(pad=0.5)
+pl.savefig("sigma_upperlim_vs_mass-channel%d.png"%channel)
+
+# exit "Output" directory
+os.chdir("../")

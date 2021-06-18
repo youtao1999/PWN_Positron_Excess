@@ -144,9 +144,6 @@ for i, channel in enumerate(channel_arr):
         chisq_arr = chisquare_arr[i, j]
         index = upperlimindex(chisq_arr)
         upperlim_arr[i, j] = sigma_arr[index]
-        # Plot sigma vs chisq to see if the upperlimit is reasonable
-        fig = pl.figure(figsize=(8, 6))
-        pl.plot(sigma_arr, chisquare_arr[i, j], lw=1.3, ls='-', color="blue", label='Mass = 100. GeV')
 
 print("Upperlimit sigma: ", upperlim_arr)
 
