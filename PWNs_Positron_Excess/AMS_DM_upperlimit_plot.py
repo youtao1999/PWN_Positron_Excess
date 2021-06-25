@@ -19,8 +19,8 @@ lowerbound = 11
 fig = pl.figure(figsize=(8, 6))
 pl.rcParams['font.size'] = '18'
 pl.plot(mass, sigma_v, lw=1.3, ls='-', color="blue", label='Channel = 16')
-pl.ylabel(r'$\chi^2$', fontsize=18)
-pl.xlabel(r'$\sigma_v$', fontsize=18)
+pl.ylabel(r'$\sigma_v$', fontsize=18)
+pl.xlabel('mass', fontsize=18)
 # pl.axis([np.power(10, sigma_v)[lowerbound], np.power(10, sigma_v)[upperbound], chisq[lowerbound], chisq[upperbound]])
 pl.xticks(fontsize=18)
 pl.yticks(fontsize=18)

@@ -22,7 +22,7 @@ channel_arr = np.array([16])
 # Make array of cross sections and masses
 mass_arr = np.logspace(1.0, 4.0, 30) # GeV
 # mass_arr = np.array([1000.])
-sigma_arr = np.logspace(-29.0 ,-20.0 ,30)
+sigma_arr = np.logspace(-29.0 ,-20.0 ,60)
 sigma_exp_arr = np.log10(sigma_arr)
 
 # Extract AMS-02 data
