@@ -17,7 +17,7 @@ import time_package
 
 # Determine the channels we would like to fit
 #e 7, mu 10, tau 13, bb 16, tt 17, WW 20, ZZ 23, gamma 25, h 26
-channel_arr = np.array([16])
+channel_arr = np.array([14])
 
 # Make array of cross sections and masses
 mass_arr = np.logspace(1.0, 4.0, 30) # GeV
@@ -120,49 +120,49 @@ for i, channel in enumerate(chisquare_arr):
 # exit "Output" directory
 os.chdir("../")
 
-# Define function that finds the upperlimit
-def upperlimindex(chisq_arr):
-    '''
-    Upperlimit defined as the sigma_v that causes a worsening of the chisquare values of >= 2.7 from the
-    minimum. This function takes in an array of sigma_v's, a corresponding array of chisquare values (which
-    is two dimensional accounting for both the dark matter channel as well as sigma_v's, finds the minimum of
-    chisquare value for each channel and returns an array of chisquare value minimums
-    '''
-    # chi_arr is the array of chisquare values for single channel
-    min_chisq = min(chisq_arr)
-    proxy = np.argwhere(chisq_arr >= min_chisq + 2.7)
-    if len(proxy) > 0:
-        lim_index = proxy[0, 0]
-        return lim_index
-    else:
-        return np.argwhere(chisq_arr == max(chisq_arr))[0,0]
-
-# Now traverse chisquare_arr to calculate upperlimits
-
-for i, channel in enumerate(channel_arr):
-    for j, mass in enumerate(mass_arr):
-        chisq_arr = chisquare_arr[i, j]
-        index = upperlimindex(chisq_arr)
-        upperlim_arr[i, j] = sigma_arr[index]
-
-print("Upperlimit sigma: ", upperlim_arr)
-
-# Output files
-# Check to see if the output file already exists
-if os.path.isdir("Cross section upperlimit vs dark matter mass"):
-    shutil.rmtree("Cross section upperlimit vs dark matter mass")
-
-# make output directory
-Output = "Cross section upperlimit vs dark matter mass"
-os.mkdir(Output)
-os.chdir(Output)
-
-for i, channel in enumerate(channel_arr):
-    outF = open("Sigma_v_upperlim_vs_mass_channel%d.txt"%channel, "w")
-    for u, upperlim in enumerate(upperlim_arr[i]):
-        outF.write("%.3f %.3e \n"%(mass_arr[u], upperlim))
-    outF.close()
-
-# exit "Output" directory
-
-os.chdir("../")
+# # Define function that finds the upperlimit
+# def upperlimindex(chisq_arr):
+#     '''
+#     Upperlimit defined as the sigma_v that causes a worsening of the chisquare values of >= 2.7 from the
+#     minimum. This function takes in an array of sigma_v's, a corresponding array of chisquare values (which
+#     is two dimensional accounting for both the dark matter channel as well as sigma_v's, finds the minimum of
+#     chisquare value for each channel and returns an array of chisquare value minimums
+#     '''
+#     # chi_arr is the array of chisquare values for single channel
+#     min_chisq = min(chisq_arr)
+#     proxy = np.argwhere(chisq_arr >= min_chisq + 2.7)
+#     if len(proxy) > 0:
+#         lim_index = proxy[0, 0]
+#         return lim_index
+#     else:
+#         return np.argwhere(chisq_arr == max(chisq_arr))[0,0]
+#
+# # Now traverse chisquare_arr to calculate upperlimits
+#
+# for i, channel in enumerate(channel_arr):
+#     for j, mass in enumerate(mass_arr):
+#         chisq_arr = chisquare_arr[i, j]
+#         index = upperlimindex(chisq_arr)
+#         upperlim_arr[i, j] = sigma_arr[index]
+#
+# print("Upperlimit sigma: ", upperlim_arr)
+#
+# # Output files
+# # Check to see if the output file already exists
+# if os.path.isdir("Cross section upperlimit vs dark matter mass"):
+#     shutil.rmtree("Cross section upperlimit vs dark matter mass")
+#
+# # make output directory
+# Output = "Cross section upperlimit vs dark matter mass"
+# os.mkdir(Output)
+# os.chdir(Output)
+#
+# for i, channel in enumerate(channel_arr):
+#     outF = open("Sigma_v_upperlim_vs_mass_channel%d.txt"%channel, "w")
+#     for u, upperlim in enumerate(upperlim_arr[i]):
+#         outF.write("%.3f %.3e \n"%(mass_arr[u], upperlim))
+#     outF.close()
+#
+# # exit "Output" directory
+#
+# os.chdir("../")

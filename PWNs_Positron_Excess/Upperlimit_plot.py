@@ -12,8 +12,10 @@ import os
 import shutil
 
 # Specify channel plot
-channel = 16
+channel = 14
 
+# stats.norm.isf( 1 - stats.chi2.cdf(6., 2) )
+# 6. is the delta chisq between the null hypothesis and the minimum chisq
 def upperlim_sigma(chi_vec, sigma_vec):
     likelihood_scan = -chi_vec
     like_zero = likelihood_scan
@@ -30,7 +32,7 @@ def upperlim_sigma(chi_vec, sigma_vec):
     return sigmavUL
 
 os.chdir("sigma_v vs chisquare")
-os.chdir("sigma_v vs chisquare16")
+os.chdir("sigma_v vs chisquare%d"%channel)
 
 mass_arr = np.logspace(1.0, 4.0, 30) # GeV
 upperlim_arr = np.zeros(len(mass_arr))
@@ -71,7 +73,7 @@ upperbound = 16
 lowerbound = 11
 fig = pl.figure(figsize=(8, 6))
 pl.rcParams['font.size'] = '18'
-pl.plot(mass_arr[1:], np.power(10,upperlim_arr[1:]), lw=1.3, ls='-', color="blue", label='Channel = 16')
+pl.plot(mass_arr[1:], np.power(10,upperlim_arr[1:]), lw=1.3, ls='-', color="blue", label='Channel = %d'%channel)
 pl.xlabel('$Mass/GeV$', fontsize=18)
 pl.ylabel(r'$\sigma_v$', fontsize=18)
 # pl.axis([np.power(10, sigma_v)[lowerbound], np.power(10, sigma_v)[upperbound], chisq[lowerbound], chisq[upperbound]])
