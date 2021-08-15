@@ -1,0 +1,3 @@
+# ASDC Cosmic rays database, created 2020-08-13 10:02:06
+#Filename ; Particle ; Mission ; Reference ; Start Date ; Stop Date ; Notes
+He_AMS_PRL119.251101.2017_ekin_000.xml ; He ; AMS-02 ; PRL 119 (2017) 251101 ; 2011-05-19T00:00:00 ; 2016-05-26T00:00:00 ;  ; time_min=2011-05-19 00:00:00.0 ; time_max=2016-05-26 00:00:00.0

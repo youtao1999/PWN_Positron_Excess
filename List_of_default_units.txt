@@ -1,0 +1,102 @@
+NAME,DEFAULT_UNITS,DESCRIPTION
+altitude,km,altitude
+altitude_max,km,upper edge of the altitude interval
+altitude_min,km,lower edge of the altitude interval
+b,G,magnetic field (modulus)
+b_max,G,upper edge of the magnetic field range
+b_min,G,lower edge of the magnetic field range
+equatorial_pitch_angle,deg,equatorial pitch angle
+equatorial_pitch_angle_max,deg,upper edge of the equatorial pitch angle range
+equatorial_pitch_angle_min,deg,lower edge of the equatorial pitch angle range
+flux,(m^2 s sr GeV)^(-1),differential flux
+fluxratio,,differential flux ratio
+fluxratio_acc_error_low,,see reference
+fluxratio_acc_error_high,,see reference
+fluxratio_back_error_low,,see reference
+fluxratio_back_error_high,,see reference
+fluxratio_cc_error_low,,see reference
+fluxratio_cc_error_high,,see reference
+fluxratio_conv_error_low,,see reference
+fluxratio_conv_error_high,,see reference
+fluxratio_limit,,Flux ratio value is a Lower Limit LL or an Upper L
+fluxratio_mig_error_low,,see reference
+fluxratio_mig_error_high,,see reference
+fluxratio_ref_error_low,,see reference
+fluxratio_ref_error_high,,see reference
+fluxratio_scale_error_low,,see reference
+fluxratio_scale_error_high,,see reference
+fluxratio_sel_error_low,,see reference
+fluxratio_sel_error_high,,see reference
+fluxratio_statistical_error_high,,higher statistical error on the flux ratio
+fluxratio_statistical_error_low,,lower statistical error on the flux ratio
+fluxratio_systematical_error_high,,higher systematical error on the flux ratio
+fluxratio_systematical_error_low,,lower systematical error on the flux ratio
+fluxratio_total_error_low,,see reference
+fluxratio_total_error_high,,see reference
+fluxratio_trig_error_low,,see reference
+fluxratio_trig_error_high,,see reference
+fluxratio_unf_error_low,,see reference
+fluxratio_unf_error_high,,see reference
+flux_acc_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_acc_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_cc_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_cc_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_limit,,Flux value is a Lower Limit LL or an Upper Limit U
+flux_mig_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_mig_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_ref_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_ref_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_scale_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_scale_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_sel_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_sel_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_statistical_error_high,(m^2 s sr GeV)^(-1),higher statistical error on the differential flux
+flux_statistical_error_low,(m^2 s sr GeV)^(-1),lower statistical error on the differential flux
+flux_systematical_error_high,(m^2 s sr GeV)^(-1),higher systematical error on the differential flux
+flux_systematical_error_low,(m^2 s sr GeV)^(-1),lower systematical error on the differential flux
+flux_sys1_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_sys1_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_sys2_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_sys2_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_sys3_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_sys3_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_total_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_total_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_trig_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_trig_error_high,(m^2 s sr GeV)^(-1),see reference
+flux_unf_error_low,(m^2 s sr GeV)^(-1),see reference
+flux_unf_error_high,(m^2 s sr GeV)^(-1),see reference
+geomagnetic_cutoff,GV,Stormer vertical cutoff
+geomagnetic_cutoff_max,GV,upper edge of the Stormer vertical cutoff range
+geomagnetic_cutoff_min,GV,lower edge of the Stormer vertical cutoff range
+kinetic_energy,GeV,kinetic energy
+kinetic_energy_max,GeV,kinetic energy
+kinetic_energy_min,GeV,kinetic energy
+latitude,deg,latitude
+latitude_max,deg,upper edge of the latitude interval
+latitude_min,deg,lower edge of the latitude interval
+longitude,deg,longitude
+longitude_max,deg,upper edge of the longitude interval
+longitude_min,deg,lower edge of the longitude interval
+lshell,Re,McIlwain L-parameter (in Earth radii, Re)
+lshell_max,Re,upper edge of the L-shell interval
+lshell_min,Re,lower edge of the L-shell interval
+number_observed_events_A,,number of detected events for particle species A
+number_observed_events_B,,number of detected events for particle species B
+number_observed_events_error_high_A,,higher error on the number of detected events for particle species A
+number_observed_events_error_high_B,,higher error on the number of detected events for particle species B
+number_observed_events_error_low_A,,lower error on the number of detected events for particle species A
+number_observed_events_error_low_B,,lower error on the number of detected events for particle species B
+rigidity,GV,rigidity
+rigidity_max,GV,rigidity
+rigidity_min,GV,rigidity
+time,Greenwich Meridian Time (GMT),UTC
+time_max,Greenwich Meridian Time (GMT),UTC
+time_min,Greenwich Meridian Time (GMT),UTC
+fluence, (m^2 sr GeV)^(-1), SEP event-integrated fluence
+fluence_statistical_error_low, (m^2 sr GeV)^(-1), lower statistical error on the SEPint_fluence
+fluence_statistical_error_high, (m^2 sr GeV)^(-1), higher statistical error on the SEPint_fluence
+fluence_systematical_error_low,	(m^2 sr GeV)^(-1), lower systematical error on the SEPint_fluence
+fluence_systematical_error_high, (m^2 sr GeV)^(-1), higher systematical error on the SEPint_fluence
+fluence_total_error_low, (m^2 sr GeV)^(-1), lower total error on the SEPint_fluence
+fluence_total_error_high,(m^2 sr GeV)^(-1), higher total error on the SEPint_fluence
