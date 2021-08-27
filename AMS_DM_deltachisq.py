@@ -76,6 +76,8 @@ def deltachisq(channel, mass_arr):
     # reversing key value pairs in dictionary to label the plots
     channel_name_dict = {y: x for x, y in directory.items()}
 
+    directory = {'bbbar_16': 16, 'ee-_7': 7, 'mumu_10': 10, 'tautau_13': 13, 'tt_17': 17, 'WW_20': 20}
+
     # Boundary index for the plot
     fig = pl.figure(figsize=(8, 6))
     pl.rcParams['font.size'] = '18'
@@ -111,3 +113,10 @@ for channel in channel_arr:
 
 # exit Upperlimit data directory, switch back to PWNs_positron_excess
 os.chdir('../PWN_Positron_Excess')
+
+#r'$b\bar{b}$'
+# r'$c\bar{c}$'
+# r'$e^+e^-$’
+# r’$\tau^+\tau^-$’
+# r’$\mu^+\mu^-$’
+# Linearize y-axis and make the range from 0-5

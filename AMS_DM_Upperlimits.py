@@ -16,7 +16,7 @@ from scipy.interpolate import interp1d
 import matplotlib.pyplot as pl
 import time_package
 
-directory = {'bbbar_16': 16, 'ee-_7': 7, 'mumu_10': 10, 'tautau_13': 13, 'tt_17': 17, 'WW_20': 20}
+directory = {'bbbar_16': 16, 'ee-_7': 7, 'mumu_10': 10, 'tautau_13': 13, 'tt_17': 17, 'WW_20': 20, 'cc': 14, 'HH': 26}
 
 # necessary functions
 def get_keys_from_value(d, val):
@@ -35,14 +35,14 @@ sigma_exp_arr = np.log10(sigma_arr)
 # make general output directory for all the channels
 os.chdir('../')
 os.mkdir('Upperlimit data')
-os.chdir('Upperlimit data')
+os.chdir('PWN_Positron_Excess')
 
 def sigma_vs_chisq(channel, sigma_exp_arr, mass_arr):
     # this function outputs data directory that contains all the chisq vs cross section for every single mass for the
     # given dark matter channel
 
     # Extract AMS-02 data
-    tabledata = np.loadtxt('../PWN_positron_excess/positron_ams02_19.dat')
+    tabledata = np.loadtxt('positron_ams02_19.dat')
     pos=tabledata[:,6]*np.power(tabledata[:,2],3.)*tabledata[:,13]/1.e4 #rescale the flux into 1/GeV/cm$^2$/s/sr
     epos= tabledata[:,2] #flux in 1/GeV/m$^2$/s/sr
     x_errorup_pos_val = tabledata[:,1]
@@ -58,11 +58,10 @@ def sigma_vs_chisq(channel, sigma_exp_arr, mass_arr):
     z = np.zeros((len(gamma_array), len(epos)))
 
     for i in range(len(gamma_array)):
-        # os.chdir(Output)
         flux_array = np.loadtxt("fluxtot_gamma%d.txt" % i)
         z[i, :] = flux_array[:, 1]
-        # os.chdir("../")
 
+    os.chdir('../Upperlimit data')
     funcinterpolate = interp2d(x, y, z)
 
     # Define function to be minimized
@@ -114,7 +113,6 @@ def sigma_vs_chisq(channel, sigma_exp_arr, mass_arr):
     # since it is too big for GitHub, therefore we are going to exit the current directory and establish a new one in parallel
     # with the repo so that everytime we commit to GitHub, the data stays local
 
-    directory = {'bbbar_16': 16, 'ee-_7': 7, 'mumu_10': 10, 'tautau_13': 13, 'tt_17': 17, 'WW_20': 20}
     os.mkdir(get_keys_from_value(directory, channel)[0])
     os.chdir(get_keys_from_value(directory, channel)[0])
     os.mkdir("sigma_v vs chisquare")
@@ -125,7 +123,8 @@ def sigma_vs_chisq(channel, sigma_exp_arr, mass_arr):
         for k, chisq in enumerate(chisquare_arr[i, j]):
            outF.write("%.3f %.3e \n"%(sigma_exp_arr[k], chisq))
         outF.close()
-    os.chdir("../")
+    os.chdir("../../")
+    # ending working directory is upperlimit
     return chisquare_arr
 
 def upperlimit(channel, mass_arr):
@@ -213,5 +212,5 @@ for channel in channel_arr:
     single_channel_sigma_vs_chsiq = sigma_vs_chisq(channel, sigma_exp_arr, mass_arr)
     single_channel_upperlim_arr = upperlimit(channel, mass_arr)
 
-# exit output directory
+# exit upperlimit data directory
 os.chdir('../')
