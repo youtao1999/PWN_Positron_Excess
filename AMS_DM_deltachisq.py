@@ -38,7 +38,7 @@ def get_keys_from_value(d, val):
     # the following function is copied and pasted from the website: https://note.nkmk.me/en/python-dict-get-key-from-value/
     return [k for k, v in d.items() if v == val]
 
-channel_arr = np.array([16])
+channel_arr = np.array([7, 10, 13, 17, 20])
 mass_arr = np.logspace(1.0, 4.0, 30) # GeV
 
 directory = {'bbbar_16': 16, 'ee-_7': 7, 'mumu_10': 10, 'tautau_13': 13, 'tt_17': 17, 'WW_20': 20}
@@ -73,12 +73,13 @@ def deltachisq(channel, mass_arr):
         outF.write("%.3f %.3f \n"%(mass_arr[i], significance))
     outF.close()
 
+    # reversing key value pairs in dictionary to label the plots
+    channel_name_dict = {y: x for x, y in directory.items()}
+
     # Boundary index for the plot
-    upperbound = 16
-    lowerbound = 11
     fig = pl.figure(figsize=(8, 6))
     pl.rcParams['font.size'] = '18'
-    pl.plot(mass_arr, sig_array, lw=1.3, ls='-', color="blue", label='Channel = %d'%channel)
+    pl.plot(mass_arr, sig_array, lw=1.3, ls='-', color="blue", label='Channel = ' + channel_name_dict[channel])
     pl.xlabel('$Mass/GeV$', fontsize=18)
     pl.ylabel(r'$\sigma$', fontsize=18)
     # pl.axis([np.power(10, sigma_v)[lowerbound], np.power(10, sigma_v)[upperbound], chisq[lowerbound], chisq[upperbound]])
