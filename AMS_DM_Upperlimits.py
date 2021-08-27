@@ -32,11 +32,6 @@ mass_arr = np.logspace(1.0, 4.0, 30) # GeV
 sigma_arr = np.logspace(-29.0 ,-20.0 ,60)
 sigma_exp_arr = np.log10(sigma_arr)
 
-# make general output directory for all the channels
-os.chdir('../')
-os.mkdir('Upperlimit data')
-os.chdir('PWN_Positron_Excess')
-
 def sigma_vs_chisq(channel, sigma_exp_arr, mass_arr):
     # this function outputs data directory that contains all the chisq vs cross section for every single mass for the
     # given dark matter channel
@@ -61,7 +56,9 @@ def sigma_vs_chisq(channel, sigma_exp_arr, mass_arr):
         flux_array = np.loadtxt("fluxtot_gamma%d.txt" % i)
         z[i, :] = flux_array[:, 1]
 
-    os.chdir('../Upperlimit data')
+    os.chdir('../')
+    os.mkdir('Upperlimit data')
+    os.chdir('Upperlimit data')
     funcinterpolate = interp2d(x, y, z)
 
     # Define function to be minimized
