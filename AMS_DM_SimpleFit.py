@@ -14,7 +14,10 @@ import matplotlib.pyplot as pl
 
 # Determine the channels we would like to fit
 #e 7, mu 10, tau 13, bb 16, tt 17, WW 20, ZZ 23, gamma 25, h 26
-channel_arr = np.array([7, 16, 10, 13])
+directory = {r'$b\bar{b}$': 16, r'$e^+e^-$': 7, r'$\mu^+\mu^-$': 10, r'$\tau^+\tau^-$': 13, r'$t^+t^-$': 17, r'$\omega^+\omega^-$': 20, r'c\bar{c}': 14,
+                 r'$h^+h^-$': 26}
+channel_name_dict = {y: x for x, y in directory.items()}
+channel_arr = np.array([16, 7, 10, 13, 17, 20, 14, 26])
 
 # Define necessary constants for PWN component
 
@@ -108,7 +111,7 @@ for DMchannel in channel_arr:
     pl.plot(epos, model_vec_tot, lw=1.3, ls='-', color="blue", label='PWN+SEC+DM')
     pl.plot(epos, model_vec_pulsar, lw=2.0, ls='-.', color="green", label='PWN')
     pl.plot(epos, model_vec_sec, lw=2.0, ls='--', color="red", label='Secondary')
-    pl.plot(epos, model_vec_dm, lw=2.0, ls=':', color="cyan", label='DM')
+    pl.plot(epos, model_vec_dm, lw=2.0, ls=':', color="cyan", label=channel_name_dict[DMchannel])
     pl.errorbar(epos, pos, xerr=[x_errordown_pos, x_errorup_pos], yerr=errortot_pos, fmt='.', color="black",
                 label="AMS-02 $e^+$")
     pl.ylabel(r'$E^3 \Phi_e$ [GeV$^2$/cm$^2$/s/sr]', fontsize=18)

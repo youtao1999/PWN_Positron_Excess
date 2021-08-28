@@ -41,7 +41,7 @@ def get_keys_from_value(d, val):
 channel_arr = np.array([7, 10, 13, 17, 20])
 mass_arr = np.logspace(1.0, 4.0, 30) # GeV
 
-directory = {'bbbar_16': 16, 'ee-_7': 7, 'mumu_10': 10, 'tautau_13': 13, 'tt_17': 17, 'WW_20': 20}
+directory = {'bbbar_16': 16, 'ee-_7': 7, 'mumu_10': 10, 'tautau_13': 13, 'tt_17': 17, 'WW_20': 20, 'cc': 14, 'HH': 26}
 
 os.chdir('../Upperlimit data')
 
@@ -74,9 +74,10 @@ def deltachisq(channel, mass_arr):
     outF.close()
 
     # reversing key value pairs in dictionary to label the plots
-    channel_name_dict = {y: x for x, y in directory.items()}
+    new_directory = {r'$b\bar{b}$': 16, r'$e^+e^-$': 7, r'$\mu^+\mu^-$': 10, r'$\tau^+\tau^-$': 13, r'$t^+t^-$': 17, r'$\omega^+\omega^-$': 20, r'c\bar{c}': 14,
+                 r'$h^+h^-$': 26}
 
-    directory = {'bbbar_16': 16, 'ee-_7': 7, 'mumu_10': 10, 'tautau_13': 13, 'tt_17': 17, 'WW_20': 20}
+    channel_name_dict = {y: x for x, y in new_directory.items()}
 
     # Boundary index for the plot
     fig = pl.figure(figsize=(8, 6))
@@ -84,13 +85,12 @@ def deltachisq(channel, mass_arr):
     pl.plot(mass_arr, sig_array, lw=1.3, ls='-', color="blue", label='Channel = ' + channel_name_dict[channel])
     pl.xlabel('$Mass/GeV$', fontsize=18)
     pl.ylabel(r'$\sigma$', fontsize=18)
-    # pl.axis([np.power(10, sigma_v)[lowerbound], np.power(10, sigma_v)[upperbound], chisq[lowerbound], chisq[upperbound]])
+    pl.ylim((0., 5.))
     pl.xticks(fontsize=18)
     pl.yticks(fontsize=18)
     pl.tick_params('both', length=7, width=2, which='major')
     pl.tick_params('both', length=5, width=2, which='minor')
     pl.grid(True)
-    pl.yscale('log')
     pl.xscale('log')
     pl.legend(loc=2, prop={'size': 16}, numpoints=1, scatterpoints=1, ncol=2)
     fig.tight_layout(pad=0.5)

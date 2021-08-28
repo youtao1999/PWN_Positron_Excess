@@ -79,7 +79,6 @@ def sigma_vs_chisq(channel, sigma_exp_arr, mass_arr):
 
     # Define an empty array of chisquare values from the the cross section array
     chisquare_arr = np.zeros((len(mass_arr), len(sigma_exp_arr)))
-    upperlim_arr = np.zeros(len(mass_arr))
 
     for j, mass in enumerate(mass_arr):
         for k, sigma_exp in enumerate(sigma_exp_arr):
@@ -115,9 +114,9 @@ def sigma_vs_chisq(channel, sigma_exp_arr, mass_arr):
     os.mkdir("sigma_v vs chisquare")
     os.chdir("sigma_v vs chisquare")
 
-    for j, mass in enumerate(chisquare_arr[i]):
+    for j, mass in enumerate(chisquare_arr):
         outF = open("sigma_v_vs_chisquare_mass=%d.txt" % mass_arr[j], "w")
-        for k, chisq in enumerate(chisquare_arr[i, j]):
+        for k, chisq in enumerate(chisquare_arr[j]):
            outF.write("%.3f %.3e \n"%(sigma_exp_arr[k], chisq))
         outF.close()
     os.chdir("../../")
